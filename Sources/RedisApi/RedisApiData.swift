@@ -15,6 +15,7 @@ public protocol RedisApiData {
     var redisToStringStringTuple: (String, String)? { get }
     var redisToStringStringTupleArray: [(String, String)] { get }
     var redisToStringStringDictionary: [String:String] { get }
+    var redisToStringStringStringTuple: (String, String, String)? { get }
     var redisToDoubleStringTuple: (Double, String)? { get }
     var redisToDoubleStringTupleArray: [(Double, String)] { get }
 }
@@ -61,6 +62,13 @@ extension RedisApiData {
             }
         }
         return results
+    }
+    
+    public var redisToStringStringStringTuple: (String, String, String)? {
+        if let values = self.redisToArray, values.count == 3 {
+            return (values[0].redisToString ?? "", values[1].redisToString ?? "", values[2].redisToString ?? "")
+        }
+        return nil
     }
     
     public var redisToDoubleStringTuple: (Double, String)? {

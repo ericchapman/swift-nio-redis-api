@@ -57,6 +57,20 @@ extension RedisApiSend {
         }
     }
     
+    func send(command: String, args: [String]) -> EventLoopFuture<Double?> {
+        return self.send(command: command, args: args).map(to: Double?.self) {
+            (data: RedisApiData) -> Double? in
+            return data.redisToDouble
+        }
+    }
+    
+    func send(command: String, args: [String]) -> EventLoopFuture<Double> {
+        return self.send(command: command, args: args).map(to: Double.self) {
+            (data: RedisApiData) -> Double in
+            return data.redisToDouble ?? 0
+        }
+    }
+    
     func send(command: String, args: [String]) -> EventLoopFuture<Bool> {
         return self.send(command: command, args: args).map(to: Bool.self) {
             (data: RedisApiData) -> Bool in
@@ -96,6 +110,13 @@ extension RedisApiSend {
         return self.send(command: command, args: args).map(to: [String:String].self) {
             (data: RedisApiData) -> [String:String] in
             return data.redisToStringStringDictionary
+        }
+    }
+    
+    func send(command: String, args: [String]) -> EventLoopFuture<(String, String, String)?> {
+        return self.send(command: command, args: args).map(to: (String, String, String)?.self) {
+            (data: RedisApiData) -> (String, String, String)? in
+            return data.redisToStringStringStringTuple
         }
     }
     
