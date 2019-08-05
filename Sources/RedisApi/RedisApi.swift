@@ -28,12 +28,16 @@ extension RedisApi {
     
     @discardableResult
     public func multi(closure: (RedisApi) -> ()) -> [EventLoopFuture<RedisApiData>] {
-        return RedisApiMulti(on: self.eventLoop, parent: self).multi(closure: closure)
+        let transaction = RedisApiMulti(on: self.eventLoop, parent: self)
+        closure(transaction)
+        return transaction.execute()
     }
     
     @discardableResult
     public func pipeline(closure: (RedisApi) -> ()) -> [EventLoopFuture<RedisApiData>] {
-        return RedisApiTransaction(on: self.eventLoop, parent: self).pipeline(closure: closure)
+        let transaction = RedisApiTransaction(on: self.eventLoop, parent: self)
+        closure(transaction)
+        return transaction.execute()
     }
     
 }

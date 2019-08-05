@@ -12,6 +12,8 @@ public class RedisApiTransaction: RedisApi {
         self.parent = parent
     }
     
+    /// Override to queue the commands
+    ///
     public func send(command: String, args: [String]) -> EventLoopFuture<RedisApiData> {
         self.commands.append([command]+args)
         
@@ -22,19 +24,32 @@ public class RedisApiTransaction: RedisApi {
         // Return the future
         return promise.futureResult
     }
-    
-    /// Link to the parent's implementation of this method
+
+    /// Override to call the parents
+    ///
     public func send(pipeline commands: [[String]]) -> EventLoopFuture<[RedisApiData]> {
         return self.parent.send(pipeline: commands)
     }
-    
-    /// Return 'self'
+
+    /// Nesting doesn't make sense.  This will allow it and just add
+    /// to the commands
+    ///
     public func pipeline(closure: (RedisApi) -> ()) -> [EventLoopFuture<RedisApiData>] {
-        // TODO: Check if commands already has values and throw error
-        
-        // Pass self to the caller
         closure(self)
-        
+        return []
+    }
+    
+    /// Nesting doesn't make sense.  This will allow it and just add
+    /// to the commands
+    ///
+    public func multi(closure: (RedisApi) -> ()) -> [EventLoopFuture<RedisApiData>] {
+        closure(self)
+        return []
+    }
+    
+    /// This method executes the transaction
+    ///
+    public func execute() -> [EventLoopFuture<RedisApiData>] {
         // Call the pipeline method and parse the responses
         _ = self.send(pipeline: self.commands).do { (data: [RedisApiData]) in
             // Fulfill the promises
@@ -50,25 +65,13 @@ public class RedisApiTransaction: RedisApi {
         return self.promises.map { $0.futureResult }
     }
     
-    /// Link to the parent's implementation of this method
-    public func multi(closure: (RedisApi) -> ()) -> [EventLoopFuture<RedisApiData>] {
-        return self.parent.multi(closure: closure)
-    }
 }
 
 public class RedisApiMulti: RedisApiTransaction {
-    /// Link to the parent's implementation of this method
-    public override func pipeline(closure: (RedisApi) -> ()) -> [EventLoopFuture<RedisApiData>] {
-        return self.parent.pipeline(closure: closure)
-    }
     
-    /// Return 'self'
-    public override func multi(closure: (RedisApi) -> ()) -> [EventLoopFuture<RedisApiData>] {
-        // TODO: Check if commands already has values and throw error
-        
-        // Pass self to the caller
-        closure(self)
-        
+    /// Override to execute a multi transaction
+    ///
+    public override func execute() -> [EventLoopFuture<RedisApiData>] {
         // Wrap request with "MULTI/EXEC" keywords
         let multiExecCommands = [["MULTI"]] + self.commands + [["EXEC"]]
         

@@ -104,6 +104,15 @@ public protocol RedisApiSortedSet: RedisApiSend {
     /// [SPEC](https://redis.io/commands/zrange)
     ///
     func zrange(key: String, start: Int, stop: Int) -> EventLoopFuture<[String]>
+    
+    /// ZRANGE key start stop [WITHSCORES]
+    ///
+    /// Returns the specified range of elements in the sorted set stored at key
+    ///
+    /// [SPEC](https://redis.io/commands/zrange)
+    ///
+    /// - note: WITHSCORES version of the command
+    ///
     func zrange(key: String, start: Int, stop: Int) -> EventLoopFuture<[(Double, String)]>
     
     /// ZRANGEBYLEX key min max [LIMIT offset count]
@@ -125,6 +134,17 @@ public protocol RedisApiSortedSet: RedisApiSend {
     /// [SPEC](https://redis.io/commands/zrangebyscore)
     ///
     func zrangebyscore(key: String, min: RedisApiType.DoubleMin, max: RedisApiType.DoubleMax, limit: (Int, Int)?) -> EventLoopFuture<[String]>
+    
+    /// ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT offset count]
+    ///
+    /// Returns all the elements in the sorted set at key with a score between
+    /// min and max (including elements with score equal to min or max). The
+    /// elements are considered to be ordered from low to high scores
+    ///
+    /// [SPEC](https://redis.io/commands/zrangebyscore)
+    ///
+    /// - note: WITHSCORES version of the command
+    ///
     func zrangebyscore(key: String, min: RedisApiType.DoubleMin, max: RedisApiType.DoubleMax, limit: (Int, Int)?) -> EventLoopFuture<[(Double, String)]>
     
     /// ZRANK key member
@@ -184,6 +204,15 @@ public protocol RedisApiSortedSet: RedisApiSend {
     /// [SPEC](https://redis.io/commands/zrevrange)
     ///
     func zrevrange(key: String, start: Int, stop: Int) -> EventLoopFuture<[String]>
+    
+    /// ZREVRANGE key start stop [WITHSCORES]
+    ///
+    /// Returns the specified range of elements in the sorted set stored at key
+    ///
+    /// [SPEC](https://redis.io/commands/zrevrange)
+    ///
+    /// - note: WITHSCORES version of the command
+    ///
     func zrevrange(key: String, start: Int, stop: Int) -> EventLoopFuture<[(Double, String)]>
     
     /// ZREVRANGEBYLEX key max min [LIMIT offset count]
@@ -204,6 +233,16 @@ public protocol RedisApiSortedSet: RedisApiSend {
     /// [SPEC](https://redis.io/commands/zrevrangebyscore)
     ///
     func zrevrangebyscore(key: String, max: RedisApiType.DoubleMax, min: RedisApiType.DoubleMin, limit: (Int, Int)?) -> EventLoopFuture<[String]>
+    
+    /// ZREVRANGEBYSCORE key max min [WITHSCORES] [LIMIT offset count]
+    ///
+    /// Returns all the elements in the sorted set at key with a score between
+    /// max and min (including elements with score equal to max or min)
+    ///
+    /// [SPEC](https://redis.io/commands/zrevrangebyscore)
+    ///
+    /// - note: WITHSCORES version of the command
+    ///
     func zrevrangebyscore(key: String, max: RedisApiType.DoubleMax, min: RedisApiType.DoubleMin, limit: (Int, Int)?) -> EventLoopFuture<[(Double, String)]>
     
     /// ZREVRANK key member
