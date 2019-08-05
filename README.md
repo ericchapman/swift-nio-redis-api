@@ -68,7 +68,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/vapor.git", from: "3.0.0"),
         
         // ⚡️ Non-blocking, event-driven Redis client.t
-        .package(url: "https://github.com/vapor/redis.git", .branch("backport-command-handler")),
+        .package(url: "https://github.com/vapor/redis.git", from: "3.4.0"),
 
         // Redis Api
         .package(url: "https://github.com/ericchapman/vapor-redis-api.git", from: "0.2.0")
