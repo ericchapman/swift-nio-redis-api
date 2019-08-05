@@ -71,7 +71,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/redis.git", .branch("backport-command-handler")),
 
         // Redis Api
-        .package(url: "https://github.com/ericchapman/swift-nio-redis-api.git", from: "1.0.0")
+        .package(url: "https://github.com/ericchapman/vapor-redis-api.git", from: "0.2.0")
     ],
     targets: [
         .target(name: "MyApp", dependencies: ["RedisApi", "Redis", "Vapor"]),
