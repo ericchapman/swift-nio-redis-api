@@ -1,6 +1,6 @@
 import NIO
 
-public protocol RedisApi: RedisApiGeneral, RedisApiValue, RedisApiList, RedisApiSet, RedisApiSortedSet, RedisApiHash {
+public protocol RedisApi: RedisApiGeneral, RedisApiClient, RedisApiValue, RedisApiList, RedisApiSet, RedisApiSortedSet, RedisApiHash {
     
     /// Returns the event loop
     var eventLoop: EventLoop { get }

@@ -9,12 +9,9 @@ public struct RedisApiType {
         
         var string: String {
             switch self {
-            case .min:
-                return "MIN"
-            case .max:
-                return "MAX"
-            case .sum:
-                return "SUM"
+            case .min: return "MIN"
+            case .max: return "MAX"
+            case .sum: return "SUM"
             }
         }
     }
@@ -27,10 +24,8 @@ public struct RedisApiType {
         
         var string: String {
             switch self {
-            case .min:
-                return "-inf"
-            case .value(let number):
-                return "\(number)"
+            case .min: return "-inf"
+            case .value(let number): return "\(number)"
             }
         }
     }
@@ -43,10 +38,8 @@ public struct RedisApiType {
         
         var string: String {
             switch self {
-            case .max:
-                return "+inf"
-            case .value(let number):
-                return "\(number)"
+            case .max: return "+inf"
+            case .value(let number): return "\(number)"
             }
         }
     }
@@ -60,12 +53,9 @@ public struct RedisApiType {
         
         var string: String {
             switch self {
-            case .min:
-                return "-"
-            case .exclusive(let character):
-                return "(\(character)"
-            case .inclusive(let character):
-                return "[\(character)"
+            case .min: return "-"
+            case .exclusive(let character): return "(\(character)"
+            case .inclusive(let character): return "[\(character)"
             }
         }
     }
@@ -79,12 +69,43 @@ public struct RedisApiType {
         
         var string: String {
             switch self {
-            case .max:
-                return "+"
-            case .exclusive(let character):
-                return "(\(character)"
-            case .inclusive(let character):
-                return "[\(character)"
+            case .max: return "+"
+            case .exclusive(let character): return "(\(character)"
+            case .inclusive(let character): return "[\(character)"
+            }
+        }
+    }
+    
+    /// Enumeration for client type
+    ///
+    public enum ClientType {
+        case normal
+        case master
+        case replica
+        case pubsub
+        
+        var string: String {
+            switch self {
+            case .normal: return "normal"
+            case .master: return "master"
+            case .replica: return "replica"
+            case .pubsub: return "pubsub"
+            }
+        }
+    }
+    
+    /// Enumeration for client reply
+    ///
+    public enum ClientReply {
+        case on
+        case off
+        case skip
+        
+        var string: String {
+            switch self {
+            case .on: return "ON"
+            case .off: return "OFF"
+            case .skip: return "SKIP"
             }
         }
     }
