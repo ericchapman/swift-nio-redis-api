@@ -61,17 +61,16 @@ let package = Package(
     name: "MyApp",
     products: [
         .library(name: "MyApp", targets: ["MyApp"]),
-        ...
     ],
     dependencies: [
         // 💧 A server-side Swift web framework.
         .package(url: "https://github.com/vapor/vapor.git", from: "3.0.0"),
         
-        // ⚡️ Non-blocking, event-driven Redis client.t
-        .package(url: "https://github.com/vapor/redis.git", .branch("backport-command-handler")),
+        // ⚡️ Non-blocking, event-driven Redis client
+        .package(url: "https://github.com/vapor/redis.git", from: "3.4.0"),
 
         // Redis Api
-        .package(url: "https://github.com/ericchapman/swift-nio-redis-api.git", from: "1.0.0")
+        .package(url: "https://github.com/ericchapman/vapor-redis-api.git", from: "0.2.0")
     ],
     targets: [
         .target(name: "MyApp", dependencies: ["RedisApi", "Redis", "Vapor"]),
