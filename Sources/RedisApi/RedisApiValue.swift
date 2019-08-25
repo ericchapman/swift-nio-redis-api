@@ -71,6 +71,25 @@ public protocol RedisApiValue: RedisApiSend {
     @discardableResult
     func set(key: String, value: String, ex: Int?, px: Int?, nx: Bool, xx: Bool) -> EventLoopFuture<Bool>
     
+    /// SETEX key seconds value
+    ///
+    /// Set key to hold the string value and set key to timeout after
+    /// a given number of seconds
+    ///
+    /// [SPEC](https://redis.io/commands/setex)
+    ///
+    @discardableResult
+    func setex(key: String, seconds: Int, value: String) -> EventLoopFuture<Bool>
+    
+    /// SETNX key value
+    ///
+    /// Set key to hold string value if key does not exist. In that
+    /// case, it is equal to SET
+    ///
+    /// [SPEC](https://redis.io/commands/setnx)
+    ///
+    @discardableResult
+    func setnx(key: String, value: String) -> EventLoopFuture<Bool>
 }
 
 extension RedisApiValue {
@@ -118,5 +137,15 @@ extension RedisApiValue {
         if xx { args.append("XX") }
         
         return self.send(command: "SET", args: args)
+    }
+    
+    @discardableResult
+    public func setex(key: String, seconds: Int, value: String) -> EventLoopFuture<Bool> {
+        return self.send(command: "SETEX", args: [key, String(seconds), value])
+    }
+    
+    @discardableResult
+    public func setnx(key: String, value: String) -> EventLoopFuture<Bool> {
+        return self.send(command: "SETNX", args: [key, value])
     }
 }
