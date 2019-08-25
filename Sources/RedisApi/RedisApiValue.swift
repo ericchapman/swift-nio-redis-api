@@ -98,7 +98,7 @@ extension RedisApiValue {
         return self.send(command: "INCRBY", args: [key, String(increment)])
     }
 
-    public func keys(pattern: String) -> EventLoopFuture<[String]> {
+    public func keys(pattern: String="*") -> EventLoopFuture<[String]> {
         return self.send(command: "KEYS", args: [pattern])
     }
     
