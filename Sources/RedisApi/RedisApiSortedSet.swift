@@ -20,7 +20,7 @@ public protocol RedisApiSortedSet: RedisApiSend {
     /// [SPEC](https://redis.io/commands/bzpopmin)
     ///
     func bzpopmin(keys: [String], timeout: Int) -> EventLoopFuture<(String, String, String)?>
-
+    
     /// ZADD key [NX|XX] [CH] [INCR] score member [score member ...])
     ///
     /// Adds all the specified members with the specified scores to the
@@ -113,7 +113,7 @@ public protocol RedisApiSortedSet: RedisApiSend {
     ///
     /// - note: WITHSCORES version of the command
     ///
-    func zrange(key: String, start: Int, stop: Int) -> EventLoopFuture<[(Double, String)]>
+    func zrange(key: String, start: Int, stop: Int) -> EventLoopFuture<[(String, Double)]>
     
     /// ZRANGEBYLEX key min max [LIMIT offset count]
     ///
@@ -145,7 +145,7 @@ public protocol RedisApiSortedSet: RedisApiSend {
     ///
     /// - note: WITHSCORES version of the command
     ///
-    func zrangebyscore(key: String, min: RedisApiType.DoubleMin, max: RedisApiType.DoubleMax, limit: (Int, Int)?) -> EventLoopFuture<[(Double, String)]>
+    func zrangebyscore(key: String, min: RedisApiType.DoubleMin, max: RedisApiType.DoubleMax, limit: (Int, Int)?) -> EventLoopFuture<[(String, Double)]>
     
     /// ZRANK key member
     ///
@@ -213,7 +213,7 @@ public protocol RedisApiSortedSet: RedisApiSend {
     ///
     /// - note: WITHSCORES version of the command
     ///
-    func zrevrange(key: String, start: Int, stop: Int) -> EventLoopFuture<[(Double, String)]>
+    func zrevrange(key: String, start: Int, stop: Int) -> EventLoopFuture<[(String, Double)]>
     
     /// ZREVRANGEBYLEX key max min [LIMIT offset count]
     ///
@@ -243,7 +243,7 @@ public protocol RedisApiSortedSet: RedisApiSend {
     ///
     /// - note: WITHSCORES version of the command
     ///
-    func zrevrangebyscore(key: String, max: RedisApiType.DoubleMax, min: RedisApiType.DoubleMin, limit: (Int, Int)?) -> EventLoopFuture<[(Double, String)]>
+    func zrevrangebyscore(key: String, max: RedisApiType.DoubleMax, min: RedisApiType.DoubleMin, limit: (Int, Int)?) -> EventLoopFuture<[(String, Double)]>
     
     /// ZREVRANK key member
     ///
@@ -341,7 +341,7 @@ extension RedisApiSortedSet {
         return self.send(command: "ZRANGE", args: [key, String(start), String(stop)])
     }
     
-    public func zrange(key: String, start: Int, stop: Int) -> EventLoopFuture<[(Double, String)]> {
+    public func zrange(key: String, start: Int, stop: Int) -> EventLoopFuture<[(String, Double)]> {
         return self.send(command: "ZRANGE", args: [key, String(start), String(stop), "WITHSCORES"])
     }
     
@@ -355,13 +355,13 @@ extension RedisApiSortedSet {
     
     public func zrangebyscore(key: String, min: RedisApiType.DoubleMin, max: RedisApiType.DoubleMax, limit: (Int, Int)?) -> EventLoopFuture<[String]> {
         var args: [String] = [key, min.string, max.string]
-
+        
         if let limit = limit { args += ["LIMIT", String(limit.0), String(limit.1)] }
         
         return self.send(command: "ZRANGEBYSCORE", args: args)
     }
     
-    public func zrangebyscore(key: String, min: RedisApiType.DoubleMin, max: RedisApiType.DoubleMax, limit: (Int, Int)?) -> EventLoopFuture<[(Double, String)]> {
+    public func zrangebyscore(key: String, min: RedisApiType.DoubleMin, max: RedisApiType.DoubleMax, limit: (Int, Int)?) -> EventLoopFuture<[(String, Double)]> {
         var args: [String] = [key, min.string, max.string, "WITHSCORES"]
         
         if let limit = limit { args += ["LIMIT", String(limit.0), String(limit.1)] }
@@ -397,7 +397,7 @@ extension RedisApiSortedSet {
         return self.send(command: "ZREVRANGE", args: [key, String(start), String(stop)])
     }
     
-    public func zrevrange(key: String, start: Int, stop: Int) -> EventLoopFuture<[(Double, String)]> {
+    public func zrevrange(key: String, start: Int, stop: Int) -> EventLoopFuture<[(String, Double)]> {
         return self.send(command: "ZREVRANGE", args: [key, String(start), String(stop), "WITHSCORES"])
     }
     
@@ -417,7 +417,7 @@ extension RedisApiSortedSet {
         return self.send(command: "ZREVRANGEBYSCORE", args: args)
     }
     
-    public func zrevrangebyscore(key: String, max: RedisApiType.DoubleMax, min: RedisApiType.DoubleMin, limit: (Int, Int)?) -> EventLoopFuture<[(Double, String)]> {
+    public func zrevrangebyscore(key: String, max: RedisApiType.DoubleMax, min: RedisApiType.DoubleMin, limit: (Int, Int)?) -> EventLoopFuture<[(String, Double)]> {
         var args: [String] = [key, max.string, min.string, "WITHSCORES"]
         
         if let limit = limit { args += ["LIMIT", String(limit.0), String(limit.1)] }
@@ -430,7 +430,7 @@ extension RedisApiSortedSet {
     }
     
     public func zscore(key: String, member: String) -> EventLoopFuture<Double?> {
-         return self.send(command: "ZSCORE", args: [key, member])
+        return self.send(command: "ZSCORE", args: [key, member])
     }
     
     public func zunionstore(destination: String, keys: [String], weights: [Int]?, aggregate: RedisApiType.Aggregate?) -> EventLoopFuture<Int> {

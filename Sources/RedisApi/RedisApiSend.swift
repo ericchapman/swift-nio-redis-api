@@ -120,17 +120,17 @@ extension RedisApiSend {
         }
     }
     
-    func send(command: String, args: [String]) -> EventLoopFuture<(Double, String)?> {
-        return self.send(command: command, args: args).map(to: (Double, String)?.self) {
-            (data: RedisApiData) -> (Double, String)? in
-            return data.redisToDoubleStringTuple
+    func send(command: String, args: [String]) -> EventLoopFuture<(String, Double)?> {
+        return self.send(command: command, args: args).map(to: (String, Double)?.self) {
+            (data: RedisApiData) -> (String, Double)? in
+            return data.redisToStringDoubleTuple
         }
     }
     
-    func send(command: String, args: [String]) -> EventLoopFuture<[(Double, String)]> {
-        return self.send(command: command, args: args).map(to: [(Double, String)].self) {
-            (data: RedisApiData) -> [(Double, String)] in
-            return data.redisToDoubleStringTupleArray
+    func send(command: String, args: [String]) -> EventLoopFuture<[(String, Double)]> {
+        return self.send(command: command, args: args).map(to: [(String, Double)].self) {
+            (data: RedisApiData) -> [(String, Double)] in
+            return data.redisToStringDoubleTupleArray
         }
     }
 }

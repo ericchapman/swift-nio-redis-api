@@ -16,8 +16,8 @@ public protocol RedisApiData {
     var redisToStringStringTupleArray: [(String, String)] { get }
     var redisToStringStringDictionary: [String:String] { get }
     var redisToStringStringStringTuple: (String, String, String)? { get }
-    var redisToDoubleStringTuple: (Double, String)? { get }
-    var redisToDoubleStringTupleArray: [(Double, String)] { get }
+    var redisToStringDoubleTuple: (String, Double)? { get }
+    var redisToStringDoubleTupleArray: [(String, Double)] { get }
 }
 
 extension RedisApiData {
@@ -71,20 +71,20 @@ extension RedisApiData {
         return nil
     }
     
-    public var redisToDoubleStringTuple: (Double, String)? {
+    public var redisToStringDoubleTuple: (String, Double)? {
         if let values = self.redisToArray, values.count == 2 {
-            return (values[0].redisToDouble ?? 0.0, values[1].redisToString ?? "")
+            return (values[0].redisToString ?? "", values[1].redisToDouble ?? 0.0)
         }
         return nil
     }
     
-    public var redisToDoubleStringTupleArray: [(Double, String)] {
-        var results = [(Double, String)]()
+    public var redisToStringDoubleTupleArray: [(String, Double)] {
+        var results = [(String, Double)]()
         if let values = self.redisToArray, values.count % 2 == 0 {
             for i in 0..<values.count/2 {
                 results.append((
-                    values[2*i].redisToDouble ?? 0.0,
-                    values[2*i+1].redisToString ?? ""
+                    values[2*i].redisToString ?? "",
+                    values[2*i+1].redisToDouble ?? 0.0
                 ))
             }
         }
